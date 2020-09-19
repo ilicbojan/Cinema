@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="fragments :: head"></div>
+<body>
+<div th:replace="fragments :: navigation-admin"></div>
+
+<div class="container" id="main">
+
+    <div class="col-8 mx-auto">
+        <div class="d-flex justify-content-between my-3">
+            <h3>Edit Hall</h3>
+            <a href="/admin/halls" class="btn btn-secondary shadow align-self-center"><- Back To Halls</a>
+        </div>
+
+        <form th:action="@{/admin/halls/update}" method="POST" enctype="multipart/form-data" th:object="${hall}">
+            <input th:field="*{id}" name="id" id="id" type="hidden">
+            <input th:field="*{cinema.id}" name="cinemaId" id="cinemaId" type="hidden">
+            <input th:field="*{rows}" name="rows" id="rows" type="hidden">
+            <input th:field="*{seatsNumber}" name="seatsNumber" id="seatsNumber" type="hidden">
+            <input th:field="*{seatsInRow}" name="seatsInRow" id="seatsInRow" type="hidden">
+
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input th:field="*{name}" name="name" id="name" type="text" class="form-control" required>
+                <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger">Name Errors</span>
+            </div>
+
+            <!--<div class="form-group">
+                <label for="seatsNumber">Number of seats</label>
+                <input th:field="*{seatsNumber}" name="seatsNumber" id="seatsNumber" type="number" class="form-control" placeholder="Enter number of seats..." required>
+                <span th:if="${#fields.hasErrors('seatsNumber')}" th:errors="*{seatsNumber}" class="text-danger">Seats number Errors</span>
+            </div>-->
+
+            <div class="form-group">
+                <label for="screenSize">Screen size <span class="text-muted">(in m²)</span></label>
+                <input th:field="*{screenSize}" name="screenSize" id="screenSize" type="number" class="form-control" required>
+                <span th:if="${#fields.hasErrors('screenSize')}" th:errors="*{screenSize}" class="text-danger">Screen size Errors</span>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-success btn-lg px-5 shadow">Update</button>
+            </div>
+        </form>
+
+    </div>
+
+</div>
+<div th:replace="fragments :: footer"></div>
+
+<div th:replace="fragments :: scripts"></div>
+
+<th:block th:if="${isUpdated}">
+    <script>toastr.success("Hall updated successfully");</script>
+</th:block>
+
+</body>
+</html>

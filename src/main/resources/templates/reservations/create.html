@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="fragments :: head"></div>
+<body>
+<div th:replace="fragments :: navigation"></div>
+
+<div class="container" id="main">
+
+    <div class="d-flex justify-content-between my-3">
+        <h3>Choose Seats - maximum 6</h3>
+    </div>
+
+    <form th:action="@{/reservations/save}" method="POST" th:object="${reservation}">
+        <input th:value="${showing.id}" name="showingId" id="showingId" type="hidden">
+        <input th:field="*{createdDate}" name="createdDate" id="createdDate" type="hidden">
+        <input th:field="*{createdTime}" name="createdTime" id="createdTime" type="hidden">
+        <input th:field="*{totalPrice}" name="totalPrice" id="totalPrice" type="hidden">
+
+        <div class="row">
+            <div class="col-8">
+                <div class="row mb-2">
+                    <div class="col-2"></div>
+                    <div class="col-10"><div class="screen">SCREEN</div></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-2 text-center">
+                        <th:block th:each="i : ${#numbers.sequence(1, showing.hall.rows)}">
+                            <div th:text="${i}" class="seat-row"></div>
+                        </th:block>
+                    </div>
+
+                    <div class="col-10">
+                        <div th:classappend="${showing.hall.seatsInRow == 20} ? seats20 : seats10">
+
+                            <th:block th:each="seat : ${seats}">
+                                <input type="checkbox" name="seats" th:id="seat- +${seat.id}" class="seat-select" th:value="${seat.id}" th:disabled="${seat.isReserved()}"/>
+                                <label th:for="seat- +${seat.id}" class="seat" th:classappend="${seat.isReserved()} ? seatReserved : seatFree"></label>
+                            </th:block>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card border-0 shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="m-0">Informations</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-text"><span class="font-weight-bold">Movie: </span><span th:text="${showing.movie.title}"></span></div>
+                        <div class="card-text"><span class="font-weight-bold">Cinema: </span><span th:text="${showing.hall.cinema.name}"></span></div>
+                        <div class="card-text"><span class="font-weight-bold">Hall: </span><span th:text="${showing.hall.name}"></span></div>
+                        <div class="card-text"><span class="font-weight-bold">Date: </span><span th:text="${showing.date}"></span></div>
+                        <div class="card-text"><span class="font-weight-bold">Time: </span><span th:text="${showing.time}"></span></div>
+                        <div class="card-text"><span class="font-weight-bold">Showing type: </span><span th:text="${showing.type.name}"></span></div>
+                        <div class="card-text"><span class="font-weight-bold">Price per ticket: </span><span th:text="${showing.price}"></span> RSD</div>
+                        <div class="card-text"><span class="font-weight-bold">Premium Member price: </span><span th:text="${showing.price * 0.8}"></span> RSD</div>
+                        <button type="submit" class="btn btn-success btn-block btn-lg shadow mt-3">Reserve Tickets</button>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center mt-3">
+                    <input type="checkbox" name="seats" class="seat-select" disabled/>
+                    <label class="seat seatFree" style="float: none; cursor: default"></label>
+                    <span> - Available seat</span>
+                </div>
+                <div class="d-flex align-items-center">
+                    <input type="checkbox" name="seats" class="seat-select" disabled/>
+                    <label class="seat seatReserved" style="float: none; cursor: default"></label>
+                    <span> - Unavailable seat</span>
+                </div>
+                <div class="d-flex align-items-center">
+                    <input type="checkbox" name="seats" class="seat-select" checked disabled/>
+                    <label class="seat" style="float: none; cursor: default"></label>
+                    <span> - Selected seat</span>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+
+</div>
+<div th:replace="fragments :: footer"></div>
+
+<div th:replace="fragments :: scripts"></div>
+
+<th:block th:if="${seatsError}">
+    <script>toastr.error("You must select at least 1 seat.");</script>
+</th:block>
+
+<th:block th:if="${maxSeats}">
+    <script>toastr.error("You can't select more than 6 seats.");</script>
+</th:block>
+
+</body>
+</html>

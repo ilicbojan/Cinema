@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="fragments :: head"></div>
+<body>
+<div th:replace="fragments :: navigation-admin"></div>
+
+<div class="container" id="main">
+
+    <div class="d-flex justify-content-between my-3">
+        <h3>Movies</h3>
+        <a href="/admin/movies/create" class="btn btn-success btn-lg shadow align-self-center">Create New</a>
+    </div>
+
+    <table id="table" class="table table-hover shadow" style="width:100%">
+        <thead class=" bg-primary text-white">
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Duration</th>
+            <th>Rating</th>
+            <th>Showings</th>
+            <th style="width: 200px;">Actions</th>
+        </tr>
+        </thead>
+        <tbody class="bg-white">
+            <th:block th:each="movie : ${movies}">
+
+                <tr>
+                    <td th:text="${movie.id}" class="align-middle"></td>
+                    <td th:text="${movie.title}" class="align-middle"></td>
+                    <td class="align-middle text-right"><span th:text="${movie.duration}"></span> min.</td>
+                    <td th:text="${movie.rating}" class="align-middle text-right"></td>
+                    <td th:text="${movie.showings.size()}" class="align-middle text-right"></td>
+                    <td class="d-flex justify-content-between">
+                        <a th:href="@{/movies/{id} (id=${movie.id})}" class="btn btn-secondary">View</a>
+                        <a th:href="@{/admin/movies/edit/{id} (id=${movie.id})}" class="btn btn-primary">Edit</a>
+                        <button type="button" th:data-id="${movie.id}" data-toggle="modal" data-target="#deleteModal" class="btn btn-danger">Delete</button>
+                    </td>
+                </tr>
+
+            </th:block>
+        </tbody>
+    </table>
+
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLongTitle">Confirmation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete selected movie?
+                </div>
+                <div class="modal-footer">
+                    <a id="delete" class="btn btn-danger">Delete</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div th:replace="fragments :: footer"></div>
+
+<div th:replace="fragments :: scripts"></div>
+
+<th:block>
+    <script>
+        $(document).ready(function () {
+            $('#table').DataTable({
+                "order": [1, 'desc']
+            });
+
+            $('#deleteModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                var id = button.data('id')
+                var modal = $(this)
+
+                modal.find('.modal-footer a').attr("href", "/admin/movies/delete/" + id)
+            });
+        });
+    </script>
+</th:block>
+
+<th:block th:if="${isCreated}">
+    <script>toastr.success("Movie created successfully");</script>
+</th:block>
+
+<th:block th:if="${isDeleted}">
+    <script>toastr.success("Movie deleted successfully");</script>
+</th:block>
+
+</body>
+</html>

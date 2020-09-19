@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="fragments :: head"></div>
+
+<body style="height: 80vh;">
+<div th:replace="fragments :: navigation"></div>
+
+<div class="container h-100">
+
+    <div class="h-100 row justify-content-center align-items-center">
+        <div class="col-8">
+            <h1 class="text-danger">403 - Unauthorized</h1>
+            <h4 class="text-danger">You are not authorized to visit this url.</h4>
+            <a href="/" class="btn btn-primary btn-lg">Go Home</a>
+        </div>
+    </div>
+
+</div>
+
+<div th:replace="fragments :: scripts"></div>
+</body>
+</html>

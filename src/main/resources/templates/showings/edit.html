@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="fragments :: head"></div>
+<body>
+<th:block sec:authorize="hasRole('ROLE_ADMIN')">
+    <div th:replace="fragments :: navigation-admin"></div>
+</th:block>
+<th:block sec:authorize="hasRole('ROLE_MANAGER')">
+    <div th:replace="fragments :: navigation"></div>
+</th:block>
+
+<div class="container" id="main">
+
+    <div class="col-8 mx-auto">
+        <div class="d-flex justify-content-between my-3">
+            <h3>Edit Showing</h3>
+            <a href="/admin/showings" class="btn btn-secondary shadow align-self-center"><- Back To Showings</a>
+        </div>
+
+        <form th:action="@{/admin/showings/update}" method="POST" enctype="multipart/form-data" th:object="${showingDto}">
+            <input th:field="*{id}" name="id" id="id" type="hidden">
+
+            <div class="form-group">
+                <label for="hallId">Cinema and hall</label>
+                <select th:field="*{hall.id}" class="form-control" name="hallId" id="hallId" required>
+                    <th:block th:each="hall : ${halls}">
+                        <option th:value="${hall.id}" th:text="${hall.cinema.name +' - ' +hall.name}"></option>
+                    </th:block>
+                </select>
+                <span th:if="${#fields.hasErrors('hall.id')}" th:errors="*{hall.id}" class="text-danger">Hall Errors</span>
+            </div>
+
+            <div class="form-group">
+                <label for="movieId">Movie</label>
+                <select th:field="*{movie.id}" class="form-control" name="movieId" id="movieId" required>
+                    <th:block th:each="movie : ${movies}">
+                        <option th:value="${movie.id}" th:text="${movie.title}"></option>
+                    </th:block>
+                    <span th:if="${#fields.hasErrors('movie.id')}" th:errors="*{movie.id}" class="text-danger">Movie Errors</span>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="dateString">Date</label>
+                <input th:field="*{date}" type="date" name="dateString" id="dateString" class="form-control" th:min="${minDate}" required>
+                <span th:if="${#fields.hasErrors('date')}" th:errors="*{date}" class="text-danger">Date Errors</span>
+            </div>
+
+            <div class="form-group">
+                <label for="timeString">Time</label>
+                <select th:field="*{time}" class="form-control" name="timeString" id="timeString" required>
+                    <option value="17:00">17:00</option>
+                    <option value="20:00">20:00</option>
+                    <option value="23:00">23:00</option>
+                </select>
+                <span th:if="${#fields.hasErrors('time')}" th:errors="*{time}" class="text-danger">Time Errors</span>
+            </div>
+
+            <div class="form-group">
+                <label for="movieId">Showing Type</label>
+                <select th:field="*{type.id}" class="form-control" name="type" id="type" required>
+                    <th:block th:each="type : ${types}">
+                        <option th:value="${type.id}" th:text="${type.name}"></option>
+                    </th:block>
+                </select>
+                <span th:if="${#fields.hasErrors('type.id')}" th:errors="*{type.id}" class="text-danger">Showing type Errors</span>
+            </div>
+
+            <div class="form-group">
+                <label for="price">Price</label>
+                <input th:field="*{price}" name="price" id="price" type="number" class="form-control" placeholder="Enter price..." required min="1" step="0.01">
+                <span th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="text-danger">Price Errors</span>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-success btn-lg px-5 shadow">Update</button>
+            </div>
+        </form>
+
+    </div>
+
+</div>
+<div th:replace="fragments :: footer"></div>
+
+<div th:replace="fragments :: scripts"></div>
+
+<th:block th:if="${isUpdated}">
+    <script>toastr.success("Showing updated successfully");</script>
+</th:block>
+
+</body>
+</html>

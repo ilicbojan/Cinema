@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="fragments :: head"></div>
+<body>
+<div th:replace="fragments :: navigation"></div>
+
+<div class="container" id="main">
+
+    <div class="d-flex justify-content-between my-3">
+        <h3><span th:text="${cinema.name}"></span> Halls</h3>
+        <a th:href="@{/cinemas/{id} (id=${cinema.id})}" class="btn btn-dark shadow align-self-center"><- Back To Cinema</a>
+    </div>
+
+    <div class="card-deck">
+        <th:block th:each="hall: ${halls}">
+
+            <div class="col-6 my-3">
+                <div class="card border-0 shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h5 th:text="${hall.name}" class="mb-0"></h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-text">Seats: <span th:text="${hall.seatsNumber}"></span></div>
+                        <div class="card-text">Rows: <span th:text="${hall.rows}"></span></div>
+                        <div class="card-text">Seats in row: <span th:text="${hall.seatsInRow}"></span></div>
+                        <div class="card-text">Screen size: <span th:text="${hall.screenSize}"></span> m²</div>
+                    </div>
+                </div>
+            </div>
+
+        </th:block>
+    </div>
+
+    <th:block th:if="${noHalls}">
+        <h4 class="text-danger"><span th:text="${cinema.name}"></span> - no halls at the moment.</h4>
+    </th:block>
+
+</div>
+<div th:replace="fragments :: footer"></div>
+
+<div th:replace="fragments :: scripts"></div>
+
+</body>
+</html>

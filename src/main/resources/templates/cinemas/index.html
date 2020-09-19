@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="fragments :: head"></div>
+<body>
+    <div th:replace="fragments :: navigation"></div>
+
+    <div class="container" id="main">
+
+        <h3 class="mt-3">Cinemas</h3>
+        <div class="card-deck" id="deck">
+            <th:block th:each="cinema : ${cinemas}">
+
+                <div class="col-10 col-sm-6 col-md-5 col-lg-4 col-xl-4 mx-auto my-5 my-sm-3 my-lg-4 px-xl-0">
+                    <div class="card border-0 shadow h-100">
+                        <div class="card-header bg-primary text-white text-center">
+                            <h5 class="m-0" th:text="${cinema.name}"></h5>
+                        </div>
+                        <img class="card-img-top image-card-cinema" th:src="@{${cinema.image}}" alt="Cinema image">
+                        <div class="card-body bg-white">
+                            <div class="card-text">City: <span th:text="${cinema.city.name}"></span></div>
+                            <div class="card-text">Address: <span th:text="${cinema.address}"></span></div>
+                            <a th:href="@{/cinemas/{id} (id=${cinema.id})}" class="btn btn-success btn-block shadow mt-2">VIEW</a>
+                        </div>
+                    </div>
+                </div>
+
+            </th:block>
+        </div>
+
+    </div>
+    <div th:replace="fragments :: footer"></div>
+
+    <div th:replace="fragments :: scripts"></div>
+</body>
+</html>

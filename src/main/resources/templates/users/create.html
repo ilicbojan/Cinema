@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="fragments :: head"></div>
+<body>
+<div th:replace="fragments :: navigation-admin"></div>
+
+<div class="container" id="main">
+
+    <div class="col-8 mx-auto">
+
+        <div class="d-flex justify-content-between my-3">
+            <h3>Create New User</h3>
+            <a href="/admin/users" class="btn btn-secondary shadow align-self-center"><- Back To Users</a>
+        </div>
+
+        <form th:action="@{/admin/users/save}" th:object="${user}" method="POST">
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input th:field="*{email}" name="email" id="email" type="email" class="form-control" required>
+                <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger">Email Errors</span>
+            </div>
+
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input th:field="*{username}" name="username" id="username" type="text" class="form-control" required>
+                <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger">Username Errors</span>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input th:field="*{password}" name="email" id="password" type="password" class="form-control" required>
+                <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger">Password Errors</span>
+            </div>
+
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input th:field="*{firstName}" name="firstName" id="firstName" type="text" class="form-control" required>
+                <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="text-danger">First Name Errors</span>
+            </div>
+
+            <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input th:field="*{lastName}" name="lastName" id="lastName" type="text" class="form-control" required>
+                <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="text-danger">Last Name Errors</span>
+            </div>
+
+            <div class="form-group">
+                <label for="roles">Role</label>
+                <select th:field="*{roles}" class="form-control" name="roles" id="roles" required>
+                    <option value="ROLE_ADMIN">Admin</option>
+                    <option value="ROLE_MANAGER">Manager</option>
+                    <option value="ROLE_USER">User</option>
+                </select>
+                <span th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}" class="text-danger">Role Errors</span>
+            </div>
+
+            <button type="submit" class="btn btn-success btn-lg px-5 shadow">Create</button>
+        </form>
+
+    </div>
+
+</div>
+<div th:replace="fragments :: footer"></div>
+
+<div th:replace="fragments :: scripts"></div>
+</body>
+</html>

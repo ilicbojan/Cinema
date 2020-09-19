@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="fragments :: head"></div>
+<body>
+    <div th:replace="fragments :: navigation"></div>
+
+    <div class="container" id="main">
+
+        <div class="row">
+
+            <div class="col-3">
+                <img th:src="@{${movie.image}}" alt="Movie poster image" style="width: 100%; height: 100%;" />
+            </div>
+
+            <div class="col-9">
+                <div class="embed-responsive embed-responsive-16by9" style="max-height: 400px">
+                    <iframe class="embed-responsive-item" th:src="${movie.trailerURL}" allowfullscreen></iframe>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row mt-4">
+
+            <div class="col-7">
+                <h1 class="h1" th:text="${movie.title}"></h1>
+                <h5>Storyline</h5>
+                <p class="text-justify" th:text="${movie.description}"></p>
+                <div class="d-flex justify-content-between align-items-end">
+                    <div class="d-flex align-items-center">
+                        <img th:src="@{/uploads/images/star1.png}" alt="Rating" style="width: 60px; height: auto" />
+                        <h2 class="mb-0 mt-1 ml-2" th:text="${movie.rating}"></h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-5">
+                <table class="table table-hover">
+                    <tr>
+                        <th>Duration:</th>
+                        <td><span th:text="${movie.duration}"></span> min.</td>
+                    </tr>
+                    <tr>
+                        <th>Genre:</th>
+                        <td th:text="${movie.genre}"></td>
+                    </tr>
+                    <tr>
+                        <th>Director:</th>
+                        <td th:text="${movie.director}"></td>
+                    </tr>
+                    <tr>
+                        <th>Writer:</th>
+                        <td th:text="${movie.writer}"></td>
+                    </tr>
+                    <tr>
+                        <th>Actors:</th>
+                        <td th:text="${movie.stars}"></td>
+                    </tr>
+                    <tr>
+                        <th style="width: 100px;">Year:</th>
+                        <td><span th:text="${movie.year}"></span>.</td>
+                    </tr>
+                    <tr>
+                        <th>Country:</th>
+                        <td th:text="${movie.country}"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-8 mx-auto">
+
+            <div class="d-flex justify-content-between my-3">
+                <h3 id="here">Search for showing</h3>
+                <a th:href="@{/movies/{id}/showings (id=${movie.id})}" class="btn btn-primary btn-lg shadow align-self-center">All Showings</a>
+            </div>
+
+            <form th:action="@{/movies/showings/search}" method="POST" th:object="${search}">
+                <input th:field="*{movieId}" name="id" type="hidden" />
+
+                <div class="form-group">
+                    <label for="cinema">Cinema</label>
+                    <select th:field="*{cinemaId}" class="form-control" name="cinemaId" id="cinema" required>
+                        <th:block th:each="cinema : ${cinemas}">
+                            <option th:value="${cinema.id}" th:text="${cinema.name}"></option>
+                        </th:block>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="date">Date</label>
+                    <input th:field="*{date}" type="date" name="date" id="date" class="form-control" th:min="${minDate}" required>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success btn-block btn-lg shadow">SEARCH</button>
+                </div>
+            </form>
+
+            <div class="card-deck">
+                <th:block th:each="showing: ${showings}">
+
+                    <div class="col-10 col-sm-10 col-md-2 col-lg-4 col-xl-4 mx-auto my-5 my-sm-3 my-lg-4 px-xl-3">
+                        <div class="card border-0 shadow">
+                            <div class="card-header text-white bg-dark">
+                                <h6 th:text="${showing.movie.title}" class="m-0"></h6>
+                            </div>
+                            <div class="card-body py-2">
+                                <div class="card-text"><span th:text="${showing.hall.cinema.name}"></span></div>
+                                <div class="card-text"><span th:text="${showing.date}"></span> - <span th:text="${showing.time}" class="font-weight-bold text-success"></span></div>
+                                <div class="card-text"><span th:text="${showing.type.name}"></span></div>
+                                <a th:href="@{/showings/{id}/reservations/create (id=${showing.id})}" class="btn btn-primary btn-block my-2 shadow">Tickets</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </th:block>
+            </div>
+
+            <th:block th:if="${noShowings}">
+                <h4 class="text-danger">No showings for selected cinema and date.</h4>
+            </th:block>
+
+        </div>
+
+    </div>
+    <div th:replace="fragments :: footer"></div>
+
+    <div th:replace="fragments :: scripts"></div>
+</body>
+</html>

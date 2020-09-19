@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="fragments :: head"></div>
+<body>
+<div th:replace="fragments :: navigation"></div>
+
+<div class="container" id="main">
+
+    <div class="col-8 mx-auto">
+
+        <div class="d-flex justify-content-between my-3">
+            <h3>My Clubs</h3>
+        </div>
+
+        <th:block th:each="club : ${clubs}">
+
+            <div class="col-12">
+
+                <div class="card border-0 shadow mb-3" style="height: 240px">
+                    <div class="row no-gutters">
+                        <div class="col-4">
+                            <img th:src="@{${club.image}}" class="card-img h-100" alt="Club image" style="max-height: 260px">
+                        </div>
+                        <div class="col-8">
+                            <div class="card-body">
+                                <h4 th:text="${club.name}" class="card-title"></h4>
+                                <div class="card-text">Price: <span th:text="${club.price}"></span> RSD</div>
+                                <div th:text="${club.description}" class="card-text"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </th:block>
+    </div>
+
+</div>
+<div th:replace="fragments :: footer"></div>
+
+<div th:replace="fragments :: scripts"></div>
+</body>
+</html>

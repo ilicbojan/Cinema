@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="fragments :: head"></div>
+<body>
+<th:block sec:authorize="hasRole('ROLE_ADMIN')">
+    <div th:replace="fragments :: navigation-admin"></div>
+</th:block>
+<th:block sec:authorize="hasRole('ROLE_MANAGER')">
+    <div th:replace="fragments :: navigation"></div>
+</th:block>
+
+<div class="container" id="main">
+
+    <div class="d-flex justify-content-between my-3">
+        <h3>Reservations for Showing: <span th:text="${showing.id}"></span></h3>
+        <a th:href="@{/admin/showings}" class="btn btn-secondary shadow align-self-center"><- Back To Showings</a>
+    </div>
+
+    <table id="table" class="table table-hover shadow" style="width:100%">
+        <thead class=" bg-primary text-white">
+        <tr>
+            <th>Id</th>
+            <th>User</th>
+            <th>Cinema</th>
+            <th>Hall</th>
+            <th>Movie</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Total</th>
+            <th>Payed</th>
+            <th style="width: 70px;">Tickets</th>
+            <th style="width: 60px;">Actions</th>
+        </tr>
+        </thead>
+        <tbody class="bg-white">
+        <th:block th:each="reservation : ${reservations}">
+
+            <tr>
+                <td th:text="${reservation.id}" class="align-middle"></td>
+                <td th:text="${reservation.user.username}" class="align-middle"></td>
+                <td class="align-middle">
+                    <a th:href="@{/cinemas/{id} (id=${reservation.showing.hall.cinema.id})}" th:text="${reservation.showing.hall.cinema.name}"></a>
+                </td>
+                <td th:text="${reservation.showing.hall.name}" class="align-middle"></td>
+                <td class="align-middle">
+                    <a th:href="@{/movies/{id} (id=${reservation.showing.movie.id})}" th:text="${reservation.showing.movie.title}"></a>
+                </td>
+                <td th:text="${reservation.showing.date}" class="align-middle"></td>
+                <td th:text="${reservation.showing.time}" class="align-middle"></td>
+                <td th:text="${reservation.totalPrice + ' RSD'}" class="align-middle text-right"></td>
+                <td class="align-middle">
+                    <span th:text="${reservation.isPayed() ? 'Yes' : 'No'}"></span>  -
+                    <button type="button" th:data-id="${reservation.id}" th:disabled="${reservation.isPayed()}" data-toggle="modal" data-target="#buyModal" class="btn btn-warning" >
+                        Buy</button>
+                </td>
+                <td class="align-middle">
+                    <a th:href="@{/admin/reservations/{id}/tickets (id=${reservation.id})}" class="btn btn-primary"><span th:text="${reservation.tickets.size()}"></span> ticket/s</a>
+                </td>
+                <td class="d-flex justify-content-between">
+                    <button type="button" th:data-id="${reservation.id}" th:disabled="${reservation.isPayed()}" data-toggle="modal" data-target="#deleteModal" class="btn btn-danger">Delete</button>
+                </td>
+            </tr>
+
+        </th:block>
+        </tbody>
+    </table>
+
+    <!-- Modal -->
+    <div class="modal fade" id="buyModal" tabindex="-1" role="dialog" aria-labelledby="buyModalTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="buyModalLongTitle">Confirmation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to buy selected reservation?
+                </div>
+                <div class="modal-footer">
+                    <a id="buy" class="btn btn-warning">Buy</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLongTitle">Confirmation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete selected reservation?
+                </div>
+                <div class="modal-footer">
+                    <a id="delete" class="btn btn-danger">Delete</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div th:replace="fragments :: footer"></div>
+
+<div th:replace="fragments :: scripts"></div>
+
+<th:block>
+    <script>
+        $(document).ready(function () {
+            $('#table').DataTable({
+                "order": [0, 'desc']
+            });
+
+            $('#deleteModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                var id = button.data('id')
+                var modal = $(this)
+
+                modal.find('.modal-footer a').attr("href", "/admin/reservations/delete/" + id)
+            });
+
+            $('#buyModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                var id = button.data('id')
+                var modal = $(this)
+
+                modal.find('.modal-footer a').attr("href", "/admin/reservations/" + id + "/buy")
+            });
+        });
+    </script>
+</th:block>
+
+<th:block th:if="${isBought}">
+    <script>toastr.success("Reservation bought successfully");</script>
+</th:block>
+
+<th:block th:if="${isCreated}">
+    <script>toastr.success("Reservation created successfully");</script>
+</th:block>
+
+<th:block th:if="${isDeleted}">
+    <script>toastr.success("Reservation deleted successfully");</script>
+</th:block>
+
+</body>
+</html>

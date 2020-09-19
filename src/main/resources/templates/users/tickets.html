@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="fragments :: head"></div>
+<body>
+<div th:replace="fragments :: navigation"></div>
+
+<div class="container" id="main">
+
+    <div class="d-flex justify-content-between my-3">
+        <h3>Tickets - <span th:text="${tickets.size()}"></span></h3>
+        <a th:href="@{/profile/reservations}" class="btn btn-dark shadow align-self-center"><- Back To Reservations</a>
+    </div>
+
+    <div class="card-deck">
+        <th:block th:each="ticket: ${tickets}">
+
+            <div class="col-6 my-3 px-0">
+                <div class="card border-0 shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h5 th:text="${reservation.showing.movie.title +' - ' +reservation.showing.hall.cinema.name}" class="mb-0"></h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="card-text">Date: <span th:text="${ticket.showing.date}"></span></div>
+                                <div class="card-text">Time: <span th:text="${ticket.showing.time}"></span></div>
+                                <div class="card-text">Showing type: <span th:text="${ticket.showing.type.name}"></span></div>
+                                <div class="card-text">Username: <span th:text="${ticket.reservation.user.username}"></span></div>
+                            </div>
+                            <div class="col-6">
+                                <div class="card-text">Hall: <span th:text="${ticket.showing.hall.name}"></span></div>
+                                <div class="card-text">Row: <span th:text="${ticket.seat.row}"></span></div>
+                                <div class="card-text">Number: <span th:text="${ticket.seat.number}"></span></div>
+                                <div class="card-text">Price: <span th:text="${reservation.totalPrice / tickets.size()}"></span> RSD</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </th:block>
+    </div>
+
+</div>
+<div th:replace="fragments :: footer"></div>
+
+<div th:replace="fragments :: scripts"></div>
+
+</body>
+</html>

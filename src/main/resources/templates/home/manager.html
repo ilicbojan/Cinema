@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="fragments :: head"></div>
+
+<body>
+<div th:replace="fragments :: navigation"></div>
+
+<div class="container" id="main">
+
+    <h3 class="my-3">Manager Dashboard</h3>
+
+    <div class="row">
+
+        <div class="col-4">
+            <div class="cont">
+                <div>Cinemas: <span th:text="${cinemas}"></span></div>
+                <div>Cities: <span th:text="${cities}"></span></div>
+            </div>
+
+            <div class="cont">
+                <div>Halls: <span th:text="${halls}"></span></div>
+                <div>Seats: <span th:text="${seats}"></span></div>
+            </div>
+
+            <div class="cont">
+                <div>Movies: <span th:text="${movies}"></span></div>
+                <div>Showings: <span th:text="${showings}"></span></div>
+            </div>
+
+            <div class="cont">
+                <div>Active reservations: <span th:text="${reservations}"></span></div>
+                <div>Reserved tickets: <span th:text="${reservedTickets}"></span></div>
+                <div>Sold reservations: <span th:text="${soldReservations}"></span></div>
+                <div>Sold tickets: <span th:text="${soldTickets}"></span></div>
+            </div>
+        </div>
+
+        <div class="col-4">
+            <div class="cont">
+                <div>Users: <span th:text="${users}"></span></div>
+                <div>Clubs: <span th:text="${clubs}"></span></div>
+            </div>
+
+            <div class="cont">
+                <div>Admins: <span th:text="${admins}"></span></div>
+                <div>Managers: <span th:text="${managers}"></span></div>
+            </div>
+
+            <div class="cont">
+                <div>Premium Members: <span th:text="${premiumMembers}"></span></div>
+                <div>Standard Members: <span th:text="${standardMembers}"></span></div>
+                <div>Bonus Cards: <span th:text="${bonusCards}"></span></div>
+            </div>
+        </div>
+
+        <div class="col-4">
+
+            <div class="cont">
+                <div class="text-success">Tickets income</div>
+                <div class="d-flex justify-content-between">
+                    <div>Total: </div>
+                    <div><span th:text="${totalIncome}"></span> RSD</div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <div>This month: </div>
+                    <div><span th:text="${thisMonth}"></span> RSD</div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <div>Last 7 days: </div>
+                    <div><span th:text="${lastSevenDays}"></span> RSD</div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <div>Today: </div>
+                    <div><span th:text="${today}"></span> RSD</div>
+                </div>
+            </div>
+
+            <div class="cont">
+                <div class="text-success">Clubs income</div>
+                <div class="d-flex justify-content-between">
+                    <div>Premium members: </div>
+                    <div><span th:text="${premiumMembers * 5000}"></span> RSD</div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <div>Standard members: </div>
+                    <div><span th:text="${standardMembers * 2000}"></span> RSD</div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <div>Bonus Cards: </div>
+                    <div><span th:text="${bonusCards * 1000}"></span> RSD</div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <div>Total: </div>
+                    <div><span th:text="${premiumMembers * 5000 + standardMembers * 2000 + bonusCards * 1000}"></span> RSD</div>
+                </div>
+            </div>
+
+            <div class="cont">
+                <div class="d-flex justify-content-between">
+                    <div>Total Income: </div>
+                    <div class="text-success"><span th:text="${totalIncome + premiumMembers * 5000 + standardMembers * 2000 + bonusCards * 1000}"></span> RSD</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+<div th:replace="fragments :: footer"></div>
+
+<div th:replace="fragments :: scripts"></div>
+</body>
+</html>

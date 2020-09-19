@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="fragments :: head"></div>
+<body>
+<div th:replace="fragments :: navigation-admin"></div>
+
+<div class="container" id="main">
+
+    <div class="d-flex justify-content-between my-3">
+        <h3>Showings for Cinema: <a th:href="@{/cinemas/${id} (id=${cinema.id})}" th:text="${cinema.name}"></a></h3>
+        <a href="/admin/cinemas" class="btn btn-secondary shadow align-self-center"><- Back To Cinemas</a>
+    </div>
+
+    <table id="table" class="table table-hover shadow" style="width:100%">
+        <thead class=" bg-primary text-white">
+        <tr>
+            <th>Id</th>
+            <th>Movie</th>
+            <th>Cinema</th>
+            <th>Hall</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Price</th>
+            <th>Type</th>
+            <th>Reservations</th>
+            <th style="width: 120px">Actions</th>
+        </tr>
+        </thead>
+        <tbody class="bg-white">
+        <th:block th:each="showing : ${showings}">
+
+            <tr>
+                <td th:text="${showing.id}" class="align-middle"></td>
+                <td class="align-middle">
+                    <a th:href="@{/movies/{id} (id=${showing.movie.id})}" th:text="${showing.movie.title}"></a>
+                </td>
+                <td class="align-middle">
+                    <a th:href="@{/cinemas/{id} (id=${showing.hall.cinema.id})}" th:text="${showing.hall.cinema.name}"></a>
+                </td>
+                <td th:text="${showing.hall.name}" class="align-middle"></td>
+                <td th:text="${showing.date}" class="align-middle"></td>
+                <td th:text="${showing.time}" class="align-middle"></td>
+                <td th:text="${showing.price + ' RSD'}" class="align-middle text-right"></td>
+                <td th:text="${showing.type.name}" class="align-middle"></td>
+                <td class="align-middle">
+                    <a th:href="@{/admin/cinemas/{cId}/showings/{id}/reservations (cId=${cinema.id}, id=${showing.id})}" class="btn btn-primary">Reservations</a>
+                </td>
+                <td class="align-middle d-flex justify-content-between">
+                    <a th:href="@{/admin/showings/edit/{id} (id=${showing.id})}" class="btn btn-primary">Edit</a>
+                    <button type="button" th:data-id="${showing.id}" data-toggle="modal" data-target="#deleteModal" class="btn btn-danger">Delete</button>
+                </td>
+            </tr>
+
+        </th:block>
+        </tbody>
+    </table>
+
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLongTitle">Confirmation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete selected showing?
+                </div>
+                <div class="modal-footer">
+                    <a id="delete" class="btn btn-danger">Delete</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div th:replace="fragments :: footer"></div>
+
+<div th:replace="fragments :: scripts"></div>
+
+<th:block>
+    <script>
+        $(document).ready(function () {
+            $('#table').DataTable({
+                "order": [4, 'desc']
+            });
+
+            $('#deleteModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                var id = button.data('id')
+                var modal = $(this)
+
+                modal.find('.modal-footer a').attr("href", "/admin/showings/delete/" + id)
+            });
+        });
+    </script>
+</th:block>
+
+<th:block th:if="${isDeleted}">
+    <script>toastr.success("Showing deleted successfully");</script>
+</th:block>
+
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="fragments :: head"></div>
+<body>
+<div th:replace="fragments :: navigation"></div>
+
+<div class="container" id="main">
+
+    <div class="col-10 mx-auto">
+
+        <div class="d-flex justify-content-between my-3">
+            <h3>Join Clubs</h3>
+        </div>
+
+        <th:block th:each="club : ${clubs}">
+
+            <div class="col-12">
+
+                <div class="card border-0 shadow mb-3" style="height: 260px">
+                    <div class="row no-gutters">
+                        <div class="col-4">
+                            <img th:src="@{${club.image}}" class="card-img h-100" alt="Club image" style="max-height: 260px">
+                        </div>
+                        <div class="col-8">
+                            <div class="card-body">
+                                <h4 th:text="${club.name}" class="card-title"></h4>
+                                <div class="card-text">Price: <span th:text="${club.price}"></span> RSD</div>
+                                <div th:text="${club.description}" class="card-text"></div>
+                                <th:block sec:authorize="isAuthenticated()">
+                                    <div th:switch="${user.clubs.contains(club)}">
+                                        <button th:case="false" type="button" th:data-id="${club.id}" data-toggle="modal"
+                                                data-target="#deleteModal" class="btn btn-success btn-lg mt-4 px-4">Join</button>
+                                        <h4 th:case="true" class="text-danger mt-4">You are already member of this club.</h4>
+                                    </div>
+                                </th:block>
+                                <th:block sec:authorize="!isAuthenticated()">
+                                    <button type="button" th:data-id="${club.id}" data-toggle="modal"
+                                            data-target="#deleteModal" class="btn btn-success btn-lg mt-4 px-4">Join</button>
+                                </th:block>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </th:block>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLongTitle">Confirmation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="creditCard">Credit Card</label>
+                        <input name="creditCard" id="creditCard" type="text" class="form-control" placeholder="Enter credit card..." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cvc">CVC</label>
+                        <input name="cvc" id="cvc" type="text" class="form-control" placeholder="Enter cvc..." required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a id="delete" class="btn btn-success px-4">Join</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div th:replace="fragments :: footer"></div>
+
+<div th:replace="fragments :: scripts"></div>
+
+<th:block>
+    <script>
+        $(document).ready(function () {
+            $('#table').DataTable();
+
+            $('#deleteModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                var id = button.data('id')
+                var modal = $(this)
+
+                modal.find('.modal-footer a').attr("href", "/clubs/" + id + "/join")
+            });
+        });
+    </script>
+</th:block>
+
+<th:block th:if="${isJoined}">
+    <script>toastr.success("Joined club successfully");</script>
+</th:block>
+
+</body>
+</html>
