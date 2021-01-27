@@ -12,6 +12,10 @@ html, body {
   padding-bottom: 180px;
 }
 
+.carousel-img {
+  height: 300px;
+}
+
 .seat {
   float: left;
   display: block;
@@ -123,8 +127,8 @@ html, body {
 
 .footer {
   position: relative;
-  margin-top: -142px;
-  height: 150px;
+  margin-top: -162px;
+  height: 388px;
   clear: both;
   padding-top: 20px;
   background-color: #626262;
@@ -164,4 +168,43 @@ html, body {
   font-size: 20px;
   padding: 10px 0;
   box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+}
+
+.movie-img {
+  height: 250px !important;
+}
+
+.club {
+  height: 100% !important;
+}
+
+.club-img {
+  height: 200px !important;
+}
+
+.hall {
+  position: relative;
+  overflow: auto;
+}
+
+@media (min-width: 1200px) {
+  .carousel-img {
+    height: 600px;
+  }
+
+  .movie-img {
+    height: 100% !important;
+  }
+
+  .club {
+    height: 260px !important;
+  }
+
+  .club-img {
+    height: 260px !important;
+  }
+
+  .footer {
+    height: 170px;
+  }
 }
