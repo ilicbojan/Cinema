@@ -18,7 +18,7 @@
 
 ![Demo Image](src/main/uploads/images/demo.png/?raw=true 'Demo Image')
 
-Web application for managing cinema (movie showings and buying tickets). The goal of the web application is to allow users to see a list of movie showings, choose cinema seats, and reserve tickets. Administrator adds new movies, cinemas, halls, and movie showings. Application have 3 different roles: administrator, user, manager.
+Web application for managing cinema (movie showings and buying tickets). The goal of the web application is to allow users to see a list of movie showings, choose cinema seats, and reserve tickets. Administrator adds new movies, cinemas, halls, and movie showings. Application has 3 different roles: administrator, user, and manager.
 
 ## ⭐️ Features <a name="features"></a>
 
@@ -39,6 +39,7 @@ Web application for managing cinema (movie showings and buying tickets). The goa
 - [Spring Boot](https://spring.io/projects/spring-boot)
 - [Hibernate](https://hibernate.org/)
 - [JPA](https://spring.io/projects/spring-data-jpa)
+- [PostgreSQL](https://www.postgresql.org/)
 - [HTML](https://www.w3schools.com/html/)
 - [CSS](https://www.w3schools.com/css/default.asp)
 - [Thymeleaf](https://www.thymeleaf.org/)
