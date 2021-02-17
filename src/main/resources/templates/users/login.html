@@ -17,7 +17,7 @@
 
                 <div class="form-group">
                     <label for="username">Username</label>
-                    <input th:field="*{username}" name="username" id="username" type="text" class="form-control"
+                    <input name="username" id="username" type="text" class="form-control"
                         value="user" required>
                     <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger">Username
                         Errors</span>
@@ -25,7 +25,7 @@
 
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input th:field="*{password}" name="email" id="password" type="password" class="form-control"
+                    <input name="password" id="password" type="password" class="form-control"
                         value="user" required>
                     <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger">Password
                         Errors</span>
